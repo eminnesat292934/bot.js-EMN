@@ -1,0 +1,48 @@
+const Discord = require('discord.js');
+const ayarlar = require('../ayarlar.json');
+
+var prefix = ayarlar.prefix;
+
+exports.run = (client, message, params) => {
+  const embedyardim = new Discord.RichEmbed()
+  .setTitle(" = Komut Listesi =")
+  .setDescription('')
+  .setColor("RANDOM")
+  .addField('= Komut Listesi =')
+.addField('[Komut hakkında bilgi için +yardım <komut adı>]')
+.addField('+davet            :: Botun davet linkini gönderir.')
+.addField('+eval            :: Kod denemek için kullanılır.')
+.addField('+load            :: Yeni eklenen komutu yükler.')
+.addField('+ping            :: Botun pingini gösterir.')
+.addField('+reboot          :: Botu yeniden başlatır.')
+.addField('+reload          :: İstediğiniz bir komutu yeniden başlatır.')
+.addField('+unload          :: İstediğiniz bir komutu devre dışı bırakır.')
+
+
+
+  
+  if (!params[0]) {
+    const commandNames = Array.from(client.commands.keys());
+    const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
+    message.channel.send(embedyardim);
+  } else {
+    let command = params[0];
+    if (client.commands.has(command)) {
+      command = client.commands.get(command);
+      message.author.send('asciidoc', `= ${command.help.name} = \n${command.help.description}\nDoğru kullanım: ` + prefix + `${command.help.usage}`);
+    }
+  }
+};
+
+exports.conf = {
+  enabled: true,
+  guildOnly: false,
+  aliases: ['yardım'],
+  permLevel: 0
+};
+
+exports.help = {
+  name: 'yardım',
+  description: 'Tüm komutları gösterir.',
+  usage: 'yardım [kategori]'
+};
